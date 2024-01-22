@@ -22,6 +22,7 @@ type RedisOptions struct {
 	Addrs          []string
 	Host           string
 	Port           int
+	Username       string
 	Password       string
 	DB             int
 }
@@ -38,6 +39,7 @@ func NewRedisDatabase(options RedisOptions) *Redis {
 	return &Redis{redis.NewStandaloneClient(redis.StandaloneOptions{
 		Host:     options.Host,
 		Port:     options.Port,
+		Username: options.Username,
 		Password: options.Password,
 		DB:       options.DB,
 	})}
@@ -262,11 +264,12 @@ func (r *Redis) SetMembers(ctx context.Context, leaderboard string, databaseMemb
 }
 
 // SetMembersTTL set member ttl in an OrderedSet and add this to expiration_worker set
-//		The TTL is a different ordered set than the original leaderboard, with key being
-//		leaderboard name and suffix ":ttl", for example to a leaderboard named test your
-//		orederedset with time to expire will be "test:ttl"
 //
-//		Note: the worker expiration set is expiration_set
+//	The TTL is a different ordered set than the original leaderboard, with key being
+//	leaderboard name and suffix ":ttl", for example to a leaderboard named test your
+//	orederedset with time to expire will be "test:ttl"
+//
+//	Note: the worker expiration set is expiration_set
 func (r *Redis) SetMembersTTL(ctx context.Context, leaderboard string, databaseMembers []*Member) error {
 	redisMembers := make([]*redis.Member, 0, len(databaseMembers))
 	for _, member := range databaseMembers {

@@ -18,6 +18,7 @@ var _ Client = &standaloneClient{}
 type StandaloneOptions struct {
 	Host     string
 	Port     int
+	Username string
 	Password string
 	DB       int
 }
@@ -26,6 +27,7 @@ type StandaloneOptions struct {
 func NewStandaloneClient(options StandaloneOptions) Client {
 	goRedisClient := goredis.NewClient(&goredis.Options{
 		Addr:     fmt.Sprintf("%s:%d", options.Host, options.Port),
+		Username: options.Username,
 		Password: options.Password,
 		DB:       options.DB,
 	})
