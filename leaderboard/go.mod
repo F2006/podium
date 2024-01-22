@@ -1,4 +1,4 @@
-module github.com/topfreegames/podium/leaderboard/v2
+module github.com/f2006/podium/leaderboard/v2
 
 go 1.20
 
