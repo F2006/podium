@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"time"
 
@@ -26,10 +27,11 @@ type StandaloneOptions struct {
 // NewStandaloneClient returns a new redis standalone client instance
 func NewStandaloneClient(options StandaloneOptions) Client {
 	goRedisClient := goredis.NewClient(&goredis.Options{
-		Addr:     fmt.Sprintf("%s:%d", options.Host, options.Port),
-		Username: options.Username,
-		Password: options.Password,
-		DB:       options.DB,
+		Addr:      fmt.Sprintf("%s:%d", options.Host, options.Port),
+		Username:  options.Username,
+		Password:  options.Password,
+		DB:        options.DB,
+		TLSConfig: &tls.Config{},
 	})
 
 	return &standaloneClient{goRedisClient}
