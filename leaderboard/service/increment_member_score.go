@@ -9,10 +9,8 @@ import (
 
 const incrementMemberScoreServiceLabel = "increment member score"
 
-const incrementMemberOrder = "desc"
-
 // IncrementMemberScore return member informations that had you score incremented
-func (s *Service) IncrementMemberScore(ctx context.Context, leaderboard string, member string, increment int, scoreTTL string) (*model.Member, error) {
+func (s *Service) IncrementMemberScore(ctx context.Context, leaderboard string, member string, increment int, scoreTTL string, order string) (*model.Member, error) {
 	modelMember := &model.Member{
 		PublicID: member,
 		Score:    int64(increment),
@@ -25,7 +23,7 @@ func (s *Service) IncrementMemberScore(ctx context.Context, leaderboard string, 
 
 	members := []*model.Member{modelMember}
 
-	err = s.setMembersValues(ctx, leaderboard, members, incrementMemberOrder)
+	err = s.setMembersValues(ctx, leaderboard, members, order)
 	if err != nil {
 		return nil, NewGeneralError(incrementMemberScoreServiceLabel, err.Error())
 	}

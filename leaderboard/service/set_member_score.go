@@ -9,10 +9,8 @@ import (
 
 const setMemberScoreServiceLabel = "set member score"
 
-const setMemberOrder = "desc"
-
 // SetMemberScore return member informations that is
-func (s *Service) SetMemberScore(ctx context.Context, leaderboard, member string, score int64, prevRank bool, scoreTTL string) (*model.Member, error) {
+func (s *Service) SetMemberScore(ctx context.Context, leaderboard, member string, score int64, prevRank bool, scoreTTL string, order string) (*model.Member, error) {
 	members := []*model.Member{
 		{
 			PublicID: member,
@@ -21,7 +19,7 @@ func (s *Service) SetMemberScore(ctx context.Context, leaderboard, member string
 	}
 
 	if prevRank {
-		err := s.setMembersPreviousRank(ctx, leaderboard, members, setMemberOrder)
+		err := s.setMembersPreviousRank(ctx, leaderboard, members, order)
 		if err != nil {
 			return nil, NewGeneralError(setMemberScoreServiceLabel, err.Error())
 		}
@@ -32,7 +30,7 @@ func (s *Service) SetMemberScore(ctx context.Context, leaderboard, member string
 		return nil, NewGeneralError(setMemberScoreServiceLabel, err.Error())
 	}
 
-	err = s.setMembersValues(ctx, leaderboard, members, setMemberOrder)
+	err = s.setMembersValues(ctx, leaderboard, members, order)
 	if err != nil {
 		return nil, NewGeneralError(setMemberScoreServiceLabel, err.Error())
 	}
